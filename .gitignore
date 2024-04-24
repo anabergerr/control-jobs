@@ -1,7 +1,7 @@
 # Arquivos de configuração do sistema
 *.pyc
 __pycache__/
-.env
+.venv
 
 # Arquivos de mídia
 media/
