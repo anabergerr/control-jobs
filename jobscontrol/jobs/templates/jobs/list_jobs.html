@@ -1,51 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
+
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/list_jobs.css' %}">
   <title>List Jobs</title>
-  <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th,
-    td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-  </style>
 </head>
 
 <body>
   <h1>List Jobs</h1>
-  <table>
+  <div class="filters">
+    <input type="text" id="search-input" placeholder="Search for job title">
+    <input type="date" id="date-input">
+    <select id="company-input">
+      <option value="">All</option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+  </div>
+
+
+
+  <table id="job-table">
     <thead>
       <tr>
         <th>Title</th>
         <th>Date</th>
         <th>Type</th>
         <th>Company Response</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
       {% for job in jobs %}
-      <tr>
+      <tr onclick="window.location='/update/{{ job.id }}';" style="cursor: pointer;">
         <td>{{ job.title }}</td>
         <td>{{ job.date }}</td>
         <td>{{ job.type_job }}</td>
         <td>{{ job.company_return }}</td>
+        <td>
+          {% csrf_token %}
+          <!-- <button class="delete-btn" data-id="{{ job.id }}">Delete</button> -->
+          <a href="/delete/{{ job.id }}"><button class="delete-btn">deleti</button></a>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+  <a href="/create"><button class="create-job">Add Job</button></a>
 </body>
+
+<script src="{% static 'js/utils.js' %}"></script>
 
 </html>
