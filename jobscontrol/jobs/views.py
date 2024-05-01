@@ -2,19 +2,15 @@ from django.shortcuts import render, redirect
 from .models import Job
 from .forms import JobForm
 from django.http import JsonResponse
-
-
+from django.http import JsonResponse
+import json
 
 def list_jobs(request):
     jobs = Job.objects.all()
     return render(request, 'jobs/list_jobs.html', {'jobs': jobs})
 
-
-from django.http import JsonResponse
-import json
-
 def create_job(request):
-    if request.method == 'POST':
+    try:
         # Verifica se o conteúdo da solicitação é JSON
         if request.content_type == 'application/json':
             # Decodifica os dados JSON
@@ -28,9 +24,10 @@ def create_job(request):
             return JsonResponse({'status': 'success', 'job_id': job.id})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
-    else:
-        return JsonResponse({'status': 'error', 'message': 'Método não permitido'}, status=405)
-
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'JSON inválido'}, status=400)
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 def update_job(request, id):
