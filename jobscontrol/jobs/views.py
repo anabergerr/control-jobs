@@ -10,20 +10,27 @@ def list_jobs(request):
     return render(request, 'jobs/list_jobs.html', {'jobs': jobs})
 
 
+from django.http import JsonResponse
+import json
+
 def create_job(request):
     if request.method == 'POST':
-        form = JobForm(request.POST)
+        # Verifica se o conteúdo da solicitação é JSON
+        if request.content_type == 'application/json':
+            # Decodifica os dados JSON
+            data = json.loads(request.body)
+            form = JobForm(data)
+        else:
+            form = JobForm(request.POST)
+
         if form.is_valid():
             job = form.save()
-            # Você pode retornar os dados do job criado como JSON, se necessário
             return JsonResponse({'status': 'success', 'job_id': job.id})
         else:
-            # Se o formulário não for válido, você pode retornar os erros como JSON
-            print(form.errors)
             return JsonResponse({'status': 'error', 'errors': form.errors}, status=400)
     else:
-        # Se o método da requisição não for POST, você pode retornar um erro adequado
         return JsonResponse({'status': 'error', 'message': 'Método não permitido'}, status=405)
+
 
 
 def update_job(request, id):

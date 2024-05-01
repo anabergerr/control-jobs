@@ -20,16 +20,9 @@ const CreateJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('type_job', formData.type_job);
-      formDataToSend.append('company_return', formData.company_return);
-      formDataToSend.append('date', formData.date);
-
-      console.log(typeof formData);
-
+      console.log('SSSSSS', formData)
       const csrftoken = Cookies.get('csrftoken');
-      const response = await axios.post('http://127.0.0.1:8000/create/', formDataToSend, {
+      const response = await axios.post('http://127.0.0.1:8000/create/', formData, {
         withCredentials: true,
         headers: {
           'X-CSRFToken': csrftoken
@@ -44,7 +37,6 @@ const CreateJob = () => {
       console.error('Error:', error);
     }
   };
-
 
   return (
     <div>
