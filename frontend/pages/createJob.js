@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; // Importar o Axios
 import Cookies from 'js-cookie';
+import styles from '../styles/CreateJob.module.css';
 
 const CreateJob = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ const CreateJob = () => {
     company_return: 'No', // Definindo o valor padrão para 'No'
     date: ''
   });
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -38,26 +40,33 @@ const CreateJob = () => {
     }
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
-    <div>
-      <h1>Create Job</h1>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
-        <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} />
+    <div className={`${styles.container} ${darkMode ? styles.dark : ''}`}>
+      <h1 className={styles.heading}>Create Job</h1>
+      <button onClick={toggleDarkMode} className={styles.darkModeButton}>
+        {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+      </button>
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <label htmlFor="title" className={styles.label}>Title:</label>
+        <input type="text" id="title" name="title" value={formData.title} onChange={handleChange} className={styles.input} />
 
-        <label htmlFor="type_job">Type of Job:</label>
-        <input type="text" id="type_job" name="type_job" value={formData.type_job} onChange={handleChange} />
+        <label htmlFor="type_job" className={styles.label}>Type of Job:</label>
+        <input type="text" id="type_job" name="type_job" value={formData.type_job} onChange={handleChange} className={styles.input} />
 
-        <label htmlFor="company_return">Company Return:</label>
-        <select id="company_return" name="company_return" value={formData.company_return} onChange={handleChange}>
+        <label htmlFor="company_return" className={styles.label}>Company Return:</label>
+        <select id="company_return" name="company_return" value={formData.company_return} onChange={handleChange} className={styles.select}>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
         </select>
 
-        <label htmlFor="date">Date:</label>
-        <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} />
+        <label htmlFor="date" className={styles.label}>Date:</label>
+        <input type="date" id="date" name="date" value={formData.date} onChange={handleChange} className={styles.input} />
 
-        <button type="submit">Submit</button>
+        <button type="submit" className={styles.button}>Submit</button>
       </form>
     </div>
   );
