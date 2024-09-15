@@ -1,18 +1,17 @@
 from flask import Flask
-from app import extensions
-from config import config
-import os
+from config import Config
+from models import db, Job
+from routes import bp as routes_bp
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
-# Configura as configurações da aplicação
-config_name = os.getenv('FLASK_CONFIG') or 'default'
-app.config.from_object(config[config_name])
+db.init_app(app)
 
-# Inicializa as extensões
-extensions.init_app(app)
+with app.app_context():
+    db.create_all()
 
-# ... (Registrar rotas e outras configurações)
+app.register_blueprint(routes_bp)
 
 if __name__ == '__main__':
     app.run(debug=True)
