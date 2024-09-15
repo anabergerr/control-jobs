@@ -1,5 +1,6 @@
 from flask import Flask
 from .extensions import db
+from .views import job 
 
 def create_app(config_name):
     app = Flask(__name__)
@@ -8,6 +9,8 @@ def create_app(config_name):
 
     db.init_app(app)
 
-    # ... (Registrar Blueprints, configurar rotas, etc)
+    # Registrar Blueprints
+    app.register_blueprint(job, url_prefix='/jobs')
 
     return app
+
