@@ -1,23 +1,18 @@
 from flask import Flask
-from flask_restx import Api
-from flask_sqlalchemy import SQLAlchemy
-from config import Config  # Importe as configurações do config.py
+from app import extensions
+from config import config
+import os
 
 app = Flask(__name__)
-app.config.from_object(Config)  # Carregue as configurações da aplicação
 
-db = SQLAlchemy(app)  # Inicialize o SQLAlchemy com a aplicação
+# Configura as configurações da aplicação
+config_name = os.getenv('FLASK_CONFIG') or 'default'
+app.config.from_object(config[config_name])
 
-# Importe seus recursos da API aqui
-from api.views import JobResource
+# Inicializa as extensões
+extensions.init_app(app)
 
-# Adicione seus endpoints à API
-api = Api(app)
-api.add_resource(JobResource, '/create')
-
-# Crie as tabelas do banco de dados
-with app.app_context():
-    db.create_all()
+# ... (Registrar rotas e outras configurações)
 
 if __name__ == '__main__':
     app.run(debug=True)

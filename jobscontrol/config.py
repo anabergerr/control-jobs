@@ -1,13 +1,16 @@
 import os
 
-class Config:
-    """Configurações padrão para a aplicação."""
-    SECRET_KEY = os.getenv('SECRET_KEY', 'your_secret_key')  # Use uma chave secreta forte
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///app.db')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False  # Desativa o rastreamento de modificações para evitar avisos
-
-    # Configurações para desenvolvimento
-    DEBUG = True
+class Config(object):
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'seu-secret-key'
+    DEBUG = False
     TESTING = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+class DevelopmentConfig(Config):
+    DEBUG = True
 
+config = {
+    'FLASK_CONFIG': DevelopmentConfig,
+    'default': DevelopmentConfig
+}
