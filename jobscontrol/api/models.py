@@ -1,22 +1,12 @@
-from django.db import models
+from flask_sqlalchemy import SQLAlchemy
 
-from django.db import models
-from django.utils import timezone
+db = SQLAlchemy() # Inicialize a SQLAlchemy (será configurada em app.py)
 
+class Job(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    type_job = db.Column(db.String(50), nullable=False)
+    date = db.Column(db.Date, nullable=False)
 
-class Job(models.Model):
-    title = models.CharField(max_length=100)
-    type_job = models.CharField(max_length=50)
-    YES = 'Yes'
-    NO = 'No'
-    COMPANY_RETURN_CHOICES = [
-        (YES, 'Yes'),
-        (NO, 'No'),
-    ]
-    company_return = models.CharField(
-        max_length=3,
-        choices=COMPANY_RETURN_CHOICES,
-        default=NO,
-    )
-    date = models.DateField(default=timezone.now)
-
+    def __repr__(self):
+        return f'<Job {self.title}>'
