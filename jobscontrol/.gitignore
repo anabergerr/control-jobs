@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.dll
+
+# Virtualenv
+.venv/
+env/
+venv/
+
+# Unit test / coverage reports
+*.log
+coverage.xml
+htmlcov/
+
+# IDE files
+*.py[cod]
+.vscode/
+.project
+.settings/
+.classpath
+
+# Miscellaneous
+*.out
+*.obj
+*.a
+*.lib
+*.dylib
+*.so
+*.exp
+*.o
+*.lo
+*.la
+*.pc
+*.gcno
+*.gcda
+*.s
+*.S
+
+# Local configuration
+local_settings.py
+*.env
+
+# Logs
+logs/
+*.log
+
+# Docker
+Dockerfile
+docker-compose.yml
+
+# Database
+app.db
+test.db
+
