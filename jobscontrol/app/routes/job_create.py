@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models import db, Job
+from app.models import db, Job
 from datetime import datetime
 
 bp = Blueprint('routes', __name__)
