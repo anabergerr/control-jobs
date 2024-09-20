@@ -19,4 +19,5 @@ def create_job():
     )
     db.session.add(new_job)
     db.session.commit()
+    print(data)
     return jsonify({'message': 'Job created successfully!'}), 201
