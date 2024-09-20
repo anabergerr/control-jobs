@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Job
 from datetime import datetime
+import logging
 
 jobs_bp = Blueprint('jobs', __name__) 
 
@@ -29,3 +30,28 @@ def create_job():
     db.session.commit()
     print(data)
     return jsonify({'message': 'Job created successfully!'}), 201
+
+@jobs_bp.route('/jobs', methods=['DELETE'])
+def delete_job():
+    data = request.get_json()
+
+    if 'id_job' not in data:
+        return jsonify({'error': 'Job ID not provided.'}), 400
+   
+    id_job = data['id_job']
+    job = Job.query.get(id_job)
+
+    if job is None:
+        return jsonify({'error': 'Job not found.'}), 404
+
+    try:
+        db.session.delete(job)
+        db.session.commit()
+        return jsonify({'message': 'Job deleted successfully.'}), 200
+    except Exception as e:
+        if isinstance(e, db.exc.IntegrityError):
+            return jsonify({'error': 'Database integrity error while deleting job.'}), 500
+        else:
+            logging.exception(str(e))
+            return jsonify({'error': 'An error occurred while deleting the job.'}), 500
+    
