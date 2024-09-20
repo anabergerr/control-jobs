@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Job
+from datetime import datetime
 
 jobs_bp = Blueprint('jobs', __name__) 
 
@@ -9,9 +10,7 @@ def get_jobs():
     job_list = [job.as_dict() for job in jobs]
     return jsonify(job_list), 200
 
-from flask import Blueprint, request, jsonify
-from app.models import db, Job
-from datetime import datetime
+
 
 @jobs_bp.route('/jobs', methods=['POST'])
 def create_job():
