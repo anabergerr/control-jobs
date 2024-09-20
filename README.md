@@ -15,4 +15,5 @@ Este projeto é uma aplicação web para gerenciar vagas de emprego e candidatur
 Este projeto é open source e qualquer contribuição é bem-vinda! 🎉 Sinta-se à vontade para abrir issues e pull requests. Vamos construir algo incrível juntos! 💪
 
 📄 Licença
-Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
+
