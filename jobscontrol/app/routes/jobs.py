@@ -11,8 +11,6 @@ def get_jobs():
     job_list = [job.as_dict() for job in jobs]
     return jsonify(job_list), 200
 
-
-
 @jobs_bp.route('/jobs', methods=['POST'])
 def create_job():
     data = request.get_json()
@@ -31,6 +29,7 @@ def create_job():
     print(data)
     return jsonify({'message': 'Job created successfully!'}), 201
 
+<<<<<<< HEAD
 @jobs_bp.route('/jobs', methods=['DELETE'])
 def delete_job():
     data = request.get_json()
@@ -55,3 +54,27 @@ def delete_job():
             logging.exception(str(e))
             return jsonify({'error': 'An error occurred while deleting the job.'}), 500
     
+=======
+
+@jobs_bp.route('/jobs/<int:id>', methods=['PATCH'])
+def update_job_partial(id):
+    data = request.get_json()
+    job = Job.query.get(id)
+    
+    if not job:
+        return jsonify({'message': 'Job not found'}), 404
+
+    # Campos permitidos para atualização
+    allowed_fields = ['name_job', 'sequence_job', 'name_company', 'result_job', 'obs_job', 'date']
+
+    # Itera sobre os campos recebidos e atualiza o job
+    for field in data:
+        if field in allowed_fields:
+            if field == 'date':  # Converte a data se for o campo 'date'
+                setattr(job, field, datetime.fromisoformat(data[field]))
+            else:
+                setattr(job, field, data[field])
+
+    db.session.commit()
+    return jsonify({'message': 'Job updated partially!'}), 200
+>>>>>>> 17eccb677f22ccf9d5d42568b63f2226e9a39f6c
