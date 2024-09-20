@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Job
 from datetime import datetime
-import logging
+
 
 jobs_bp = Blueprint('jobs', __name__) 
 
@@ -73,5 +73,4 @@ def delete_job():
         if isinstance(e, db.exc.IntegrityError):
             return jsonify({'error': 'Database integrity error while deleting job.'}), 500
         else:
-            logging.exception(str(e))
             return jsonify({'error': 'An error occurred while deleting the job.'}), 500
