@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from app.models import db, Job
-from app.routes.job_create import bp as routes_bp
+from app.routes.jobs import jobs_bp as routes_dp
 
 def create_app():
     app = Flask(__name__)
@@ -12,7 +12,7 @@ def create_app():
     with app.app_context():
         db.create_all()
 
-    app.register_blueprint(routes_bp)
+    app.register_blueprint(routes_dp)
 
     return app
 

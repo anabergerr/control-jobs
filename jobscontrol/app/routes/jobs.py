@@ -1,10 +1,19 @@
 from flask import Blueprint, request, jsonify
 from app.models import db, Job
+
+jobs_bp = Blueprint('jobs', __name__) 
+
+@jobs_bp.route('/jobs', methods=['GET'])
+def get_jobs():
+    jobs = db.session.query(Job).all()
+    job_list = [job.as_dict() for job in jobs]
+    return jsonify(job_list), 200
+
+from flask import Blueprint, request, jsonify
+from app.models import db, Job
 from datetime import datetime
 
-bp = Blueprint('routes', __name__)
-
-@bp.route('/create', methods=['POST'])
+@jobs_bp.route('/jobs', methods=['POST'])
 def create_job():
     data = request.get_json()
     # Converte a string de data para um objeto datetime
