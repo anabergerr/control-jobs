@@ -14,3 +14,14 @@ class Job(db.Model):
 
     def __repr__(self):
         return f'<Job {self.name}>'
+    
+    def as_dict(self):
+        return {
+            'idJob': self.idJob,
+            'name_job': self.name_job,
+            'sequence_job': self.sequence_job,
+            'name_company': self.name_company,
+            'result_job': self.result_job,
+            'obs_job': self.obs_job,
+            'date': self.date.isoformat()  # Formata a data como string ISO 8601
+        }
