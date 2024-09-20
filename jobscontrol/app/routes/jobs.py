@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from app.models import db, Job
 from datetime import datetime
 
+
 jobs_bp = Blueprint('jobs', __name__) 
 
 @jobs_bp.route('/jobs', methods=['GET'])
@@ -50,3 +51,26 @@ def update_job_partial(id):
 
     db.session.commit()
     return jsonify({'message': 'Job updated partially!'}), 200
+
+@jobs_bp.route('/jobs', methods=['DELETE'])
+def delete_job():
+    data = request.get_json()
+
+    if 'id' not in data:
+        return jsonify({'error': 'Job ID not provided.'}), 400
+   
+    id = data['id']
+    job = Job.query.get(id)
+
+    if job is None:
+        return jsonify({'error': 'Job not found.'}), 404
+
+    try:
+        db.session.delete(job)
+        db.session.commit()
+        return jsonify({'message': 'Job deleted successfully.'}), 200
+    except Exception as e:
+        if isinstance(e, db.exc.IntegrityError):
+            return jsonify({'error': 'Database integrity error while deleting job.'}), 500
+        else:
+            return jsonify({'error': 'An error occurred while deleting the job.'}), 500

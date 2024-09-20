@@ -52,6 +52,5 @@ Dockerfile
 docker-compose.yml
 
 # Database
-app.db
-test.db
+*.db
 
