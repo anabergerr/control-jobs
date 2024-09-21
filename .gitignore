@@ -8,6 +8,7 @@ media/
 
 # Arquivos de banco de dados
 db.sqlite3
+*.db
 
 # Arquivos de ambiente virtual
 venv/
