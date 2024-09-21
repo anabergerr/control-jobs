@@ -14,14 +14,13 @@ def get_jobs():
 @jobs_bp.route('/jobs', methods=['POST'])
 def create_job():
     data = request.get_json()
-    # Converte a string de data para um objeto datetime
     date_obj = datetime.fromisoformat(data['date'])
     new_job = Job(
         name_job=data['name_job'],
         sequence_job=data['sequence_job'],
         name_company=data['name_company'],
         result_job=data['result_job'],
-        obs_job=data.get('obs_job'),  # obs_job é opcional, então usamos get() para evitar erro se não for fornecido
+        obs_job=data.get('obs_job'),  
         date=date_obj
     )
     db.session.add(new_job)
@@ -38,13 +37,11 @@ def update_job_partial(id):
     if not job:
         return jsonify({'message': 'Job not found'}), 404
 
-    # Campos permitidos para atualização
     allowed_fields = ['name_job', 'sequence_job', 'name_company', 'result_job', 'obs_job', 'date']
 
-    # Itera sobre os campos recebidos e atualiza o job
     for field in data:
         if field in allowed_fields:
-            if field == 'date':  # Converte a data se for o campo 'date'
+            if field == 'date':  
                 setattr(job, field, datetime.fromisoformat(data[field]))
             else:
                 setattr(job, field, data[field])
