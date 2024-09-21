@@ -1,6 +1,6 @@
 ## Padrão de Commits com Emojis 🎉
 
-Este guia define um padrão de commits para facilitar a comunicação e a organização do histórico de alterações do projeto. Usamos emojis para tornar a leitura do histórico mais agradável e intuitiva.
+Este guia define um padrão de commits para facilitar a comunicação e a organização do histórico de alterações do projeto. Vc pode usar emojis para tornar a leitura do histórico mais agradável e intuitiva.
 
 ### Tipos de Commits
 
