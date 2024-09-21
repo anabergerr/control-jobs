@@ -80,12 +80,8 @@ def delete_job():
     except Exception as e:
         if isinstance(e, db.exc.IntegrityError):
             return (
-                jsonify({
-                    'error': 'Database integrity error while deleting job.'
-                }),
+                jsonify({'error': 'Database integrity error while deleting job.'}),
                 500,
             )
         else:
-            return jsonify({
-                'error': 'An error occurred while deleting the job.'
-            }), 500
+            return jsonify({'error': 'An error occurred while deleting the job.'}), 500

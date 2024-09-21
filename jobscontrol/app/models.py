@@ -6,7 +6,7 @@ db = SQLAlchemy()
 
 
 class Job(db.Model):
-    idJob = db.Column(db.Integer, primary_key=True)
+    id_job = db.Column(db.Integer, primary_key=True)
     name_job = db.Column(db.String(100), nullable=False)
     sequence_job = db.Column(db.String(100), nullable=False)
     name_company = db.Column(db.String(100), nullable=False)
