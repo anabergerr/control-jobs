@@ -1,0 +1,28 @@
+[project]
+name = "jobscontrol"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flask-sqlalchemy>=3.1.1",
+    "flask-testing>=0.8.1",
+    "flask>=3.0.3",
+    "pylint>=3.3.0",
+    "pytest>=8.3.3",
+    "ruff>=0.6.6",
+    "sqlalchemy>=2.0.35",
+]
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+exclude = [".venv"]
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
