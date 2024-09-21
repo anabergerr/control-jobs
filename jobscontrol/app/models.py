@@ -1,7 +1,9 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
+
 
 class Job(db.Model):
     idJob = db.Column(db.Integer, primary_key=True)
@@ -14,7 +16,7 @@ class Job(db.Model):
 
     def __repr__(self):
         return f'<Job {self.name}>'
-    
+
     def as_dict(self):
         return {
             'idJob': self.idJob,
@@ -23,5 +25,5 @@ class Job(db.Model):
             'name_company': self.name_company,
             'result_job': self.result_job,
             'obs_job': self.obs_job,
-            'date': self.date.isoformat()  # Formata a data como string ISO 8601
+            'date': self.date.isoformat(),
         }

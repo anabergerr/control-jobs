@@ -1,7 +1,9 @@
 from flask import Flask
-from config import Config
-from app.models import db, Job
+
+from app.models import db
 from app.routes.jobs import jobs_bp as routes_dp
+from config import Config
+
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +17,7 @@ def create_app():
     app.register_blueprint(routes_dp)
 
     return app
+
 
 if __name__ == '__main__':
     app = create_app()
