@@ -8,6 +8,7 @@ services:
       - "5000:5000"
     volumes:
       - ./jobscontrol:/app
+      - /app/.venv
     environment:
       - FLASK_ENV=development
 
