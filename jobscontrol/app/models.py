@@ -19,7 +19,7 @@ class Job(db.Model):
 
     def as_dict(self):
         return {
-            'idJob': self.idJob,
+            'id_job': self.id_job,
             'name_job': self.name_job,
             'sequence_job': self.sequence_job,
             'name_company': self.name_company,
