@@ -72,7 +72,7 @@ def delete_job():
 
     if job is None:
         return jsonify({'error': 'Job not found.'}), 404
-
+    #Tratativas de excessões deletar job
     try:
         db.session.delete(job)
         db.session.commit()
