@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.database import engine, Base
+
+from app.database import Base, engine
 from app.routes.jobs import router as jobs_router
 
 # Cria as tabelas no banco de dados (se não existirem)

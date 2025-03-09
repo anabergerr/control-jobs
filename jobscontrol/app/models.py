@@ -1,8 +1,10 @@
-from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import declarative_base
 from datetime import datetime
 
+from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy.orm import declarative_base
+
 Base = declarative_base()
+
 
 class Job(Base):
     __tablename__ = "jobs"

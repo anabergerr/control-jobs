@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Exemplo de URL de banco de dados (SQLite)
 DATABASE_URL = "sqlite:///./database.db"
