@@ -1,7 +1,3 @@
-Aqui está o seu `README` atualizado, removendo o procedimento para Windows e mantendo apenas as instruções para Linux/macOS. 🎉
-
----
-
 # 🌟 Controle de Vagas de Emprego 🌟
 
 Bem-vindo ao nosso projeto de **Controle de Vagas de Emprego**! 🚀
@@ -51,7 +47,3 @@ Este projeto é open source e qualquer contribuição é bem-vinda! 🎉 Sinta-s
 ## 📄 Licença
 
 Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
-
----
-
-Agora o `README` está focado apenas em usuários Linux/macOS. 😎
