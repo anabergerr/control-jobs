@@ -16,3 +16,6 @@ class JobResponse(BaseModel):
     result_job: str
     obs_job: str | None = None
     date: datetime | None = None
+
+    class Config:
+        from_attributes = True

@@ -20,7 +20,7 @@ def create_job(job: JobCreate, db: Session = Depends(get_db)):
     job_service = JobService(JobRepositoryImpl(db))
     return job_service.create_job(job)
 
-@router.get("/jobs/", response_model=list[JobResponse])
+@router.get("/jobs", response_model=list[JobResponse])
 def get_jobs(db: Session = Depends(get_db)):
     job_service = JobService(JobRepositoryImpl(db))
     return job_service.get_jobs()
