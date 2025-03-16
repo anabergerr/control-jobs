@@ -1,6 +1,9 @@
 from datetime import datetime
+
 from sqlalchemy import Column, DateTime, Integer, String
+
 from database.database import Base  # Importando a base correta
+
 
 class Job(Base):
     __tablename__ = "jobs"

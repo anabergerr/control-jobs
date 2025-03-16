@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
+
+from adapters.persistence.models import Job
 from core.domain.job import JobCreate, JobResponse  # Importe as classes corretas
 from core.ports.job_repository import JobRepository
-from adapters.persistence.models import Job
+
 
 class JobRepositoryImpl(JobRepository):
     def __init__(self, db: Session):

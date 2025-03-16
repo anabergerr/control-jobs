@@ -1,5 +1,7 @@
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
+
 
 class JobCreate(BaseModel):
     name_job: str
@@ -7,6 +9,7 @@ class JobCreate(BaseModel):
     name_company: str
     result_job: str
     obs_job: str | None = None
+
 
 class JobResponse(BaseModel):
     id_job: int

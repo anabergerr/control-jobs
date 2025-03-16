@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from adapters.web.job_routes import router as jobs_router
 from database.database import Base, engine
 

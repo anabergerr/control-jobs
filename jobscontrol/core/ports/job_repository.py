@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from core.domain.job import JobCreate, JobResponse  # Importe as classes corretas
+
 
 class JobRepository(ABC):
     @abstractmethod

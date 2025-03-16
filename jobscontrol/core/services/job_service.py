@@ -1,5 +1,6 @@
-from core.ports.job_repository import JobRepository
 from core.domain.job import JobCreate, JobResponse  # Importe as classes corretas
+from core.ports.job_repository import JobRepository
+
 
 class JobService:
     def __init__(self, job_repository: JobRepository):
