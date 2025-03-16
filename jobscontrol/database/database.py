@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-# Exemplo de URL de banco de dados (SQLite)
+# URL do banco de dados (SQLite)
 DATABASE_URL = "sqlite:///./database.db"
 
 # Cria a engine do banco de dados
