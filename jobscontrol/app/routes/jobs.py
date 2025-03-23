@@ -1,87 +1,91 @@
 from datetime import datetime
 
-from flask import Blueprint, jsonify, request
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-from app.models import Job, db
+from app.database import SessionLocal  # Importação da sessão do banco de dados
+from app.models import Job  # Importação do modelo Job
 
-jobs_bp = Blueprint('jobs', __name__)
-
-
-@jobs_bp.route('/jobs', methods=['GET'])
-def get_jobs():
-    jobs = db.session.query(Job).all()
-    job_list = [job.as_dict() for job in jobs]
-    return jsonify(job_list), 200
+router = APIRouter()
 
 
-@jobs_bp.route('/jobs', methods=['POST'])
-def create_job():
-    data = request.get_json()
-    date_obj = datetime.fromisoformat(data['date'])
-    new_job = Job(
-        name_job=data['name_job'],
-        sequence_job=data['sequence_job'],
-        name_company=data['name_company'],
-        result_job=data['result_job'],
-        obs_job=data.get('obs_job'),
-        date=date_obj,
-    )
-    db.session.add(new_job)
-    db.session.commit()
-    print(data)
-    return jsonify({'message': 'Job created successfully!'}), 201
-
-
-@jobs_bp.route('/jobs/<int:id>', methods=['PATCH'])
-def update_job_partial(id):
-    data = request.get_json()
-    job = Job.query.get(id)
-
-    if not job:
-        return jsonify({'message': 'Job not found'}), 404
-
-    allowed_fields = [
-        'name_job',
-        'sequence_job',
-        'name_company',
-        'result_job',
-        'obs_job',
-        'date',
-    ]
-
-    for field in data:
-        if field in allowed_fields:
-            if field == 'date':
-                setattr(job, field, datetime.fromisoformat(data[field]))
-            else:
-                setattr(job, field, data[field])
-
-    db.session.commit()
-    return jsonify({'message': 'Job updated partially!'}), 200
-
-
-@jobs_bp.route('/jobs', methods=['DELETE'])
-def delete_job():
-    data = request.get_json()
-
-    if 'id' not in data:
-        return jsonify({'error': 'Job ID not provided.'}), 400
-
-    id = data['id']
-    job = Job.query.get(id)
-
-    if job is None:
-        return jsonify({'error': 'Job not found.'}), 404
-
+# Função para obter a sessão do banco de dados
+def get_db():
+    db = SessionLocal()
     try:
-        db.session.delete(job)
-        db.session.commit()
-        return jsonify({'message': 'Job deleted successfully.'}), 200
-    except Exception as e:
-        if isinstance(e, db.exc.IntegrityError):
-            return (
-                jsonify({'error': 'Database integrity error while deleting job.'}),
-                500,
-            )
-        else:
-            return jsonify({'error': 'An error occurred while deleting the job.'}), 500
+        yield db
+    finally:
+        db.close()
+
+
+# Rota para listar todos os jobs
+@router.get("/jobs/")
+def get_jobs(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    jobs = db.query(Job).offset(skip).limit(limit).all()
+    return jobs
+
+
+# Rota para obter um job por ID
+@router.get("/jobs/{job_id}")
+def get_job(job_id: int, db: Session = Depends(get_db)):
+    job = db.query(Job).filter(Job.id_job == job_id).first()
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return job
+
+
+# Rota para criar um novo job
+@router.post("/jobs/")
+def create_job(job_data: dict, db: Session = Depends(get_db)):
+
+    if 'date' in job_data and isinstance(job_data['date'], str):
+        job_data['date'] = datetime.fromisoformat(job_data['date'])  # Converte para datetime
+
+    new_job = Job(**job_data)
+    db.add(new_job)
+    db.commit()
+    db.refresh(new_job)
+    return {
+        "message": "Job created successfully!",
+        "job": new_job.as_dict()
+    }
+
+
+# Rota para atualizar um job existente
+@router.put("/jobs/{job_id}")
+def update_job(job_id: int, job_data: dict, db: Session = Depends(get_db)):
+    job = db.query(Job).filter(Job.id_job == job_id).first()
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    for key, value in job_data.items():
+        setattr(job, key, value)
+    db.commit()
+    db.refresh(job)
+    return job
+
+
+# Rota para deletar um job
+@router.delete("/jobs/{job_id}")
+def delete_job(job_id: int, db: Session = Depends(get_db)):
+    job = db.query(Job).filter(Job.id_job == job_id).first()
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found.")
+    db.delete(job)
+    db.commit()
+    return {"message": "Job deleted."}
+
+
+# Rota para atualizar parcialmente um job
+@router.patch("/jobs/{job_id}")
+def update_job_partial(job_id: int, job_data: dict, db: Session = Depends(get_db)):
+    job = db.query(Job).filter(Job.id_job == job_id).first()
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    # Atualiza apenas os campos fornecidos no payload
+    for key, value in job_data.items():
+        setattr(job, key, value)
+
+    db.commit()
+    db.refresh(job)
+    return job

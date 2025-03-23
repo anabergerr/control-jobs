@@ -22,9 +22,9 @@ RUN uv sync --frozen --no-dev
 # Ensure the virtual environment's bin directory is in the PATH
 ENV PATH="/app/.venv/bin:$PATH"
 
-#Expose Flask port
-EXPOSE 5000
+#Expose FastAPI port
+EXPOSE 8000
 
-# Run Flask with the correct command
-ENTRYPOINT ["/app/.venv/bin/flask"]
-CMD ["run", "--host=0.0.0.0"]
+# Run FastAPI with the correct command
+ENTRYPOINT ["/app/.venv/bin/uvicorn"]
+CMD ["main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -5,21 +5,12 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-
-    "flask-sqlalchemy>=3.1.1",
-
-    "flask-testing>=0.8.1",
-
-    "flask>=3.0.3",
-
+    "fastapi>=0.115.0",
+    "uvicorn>=0.34.0",
     "pylint>=3.3.0",
-
     "pyproject-toml>=0.0.10",
-
     "pytest>=8.3.3",
-
     "ruff>=0.6.6",
-
     "sqlalchemy>=2.0.35",
 ]
 

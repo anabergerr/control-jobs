@@ -1,33 +1,28 @@
 from datetime import datetime
-
 import pytest
+from fastapi.testclient import TestClient
+from app.main import app  # Importação da aplicação FastAPI
+from app.database import SessionLocal, engine
+from app.models import Base, Job
 
-from app import create_app, db
-from app.models import Job
+# Cria o cliente de teste
+client = TestClient(app)
 
+# Fixture para configurar o banco de dados de teste
+@pytest.fixture(scope="module")
+def setup_db():
+    # Cria as tabelas no banco de dados
+    Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
 
-@pytest.fixture
-def client():
-    app = create_app()
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    with app.app_context():
-        db.create_all()  # Cria as tabelas no banco de dados de teste
-        yield app.test_client()  # Retorna o cliente de teste
-        db.drop_all()  # Limpa o banco de dados após os testes
-
-
-@pytest.fixture
-def init_database():
+    # Adiciona dados de teste
     job1 = Job(
         name_job='Desenvolvedor Backend',
         sequence_job='12345',
         name_company='Tech Solutions',
         result_job='Projeto concluído com sucesso',
         obs_job='Trabalho remoto, entregas semanais',
-        date=datetime.strptime('2023-10-05T14:30:00', '%Y-%m-%dT%H:%M:%S'),
+        date=datetime.fromisoformat("2023-10-05T14:30:00"),
     )
 
     job2 = Job(
@@ -36,23 +31,24 @@ def init_database():
         name_company='Web Innovations',
         result_job='Trabalho em progresso',
         obs_job='Equipe colaborativa',
-        date=datetime.strptime('2023-11-15T09:00:00', '%Y-%m-%dT%H:%M:%S'),
+        date=datetime.fromisoformat("2023-11-15T09:00:00"),
     )
 
-    db.session.add(job1)
-    db.session.add(job2)
-    db.session.commit()
+    db.add(job1)
+    db.add(job2)
+    db.commit()
 
-    yield db
+    yield db  # Retorna o banco de dados configurado
 
-    db.session.remove()
-    db.drop_all()
+    # Limpa o banco de dados após os testes
+    db.close()
+    Base.metadata.drop_all(bind=engine)
 
-
-def test_get_jobs(client, init_database):
+# Teste para obter todos os jobs
+def test_get_jobs(setup_db):
     # Faz uma requisição GET para o endpoint /jobs
-    response = client.get('/jobs')
-    json_data = response.get_json()
+    response = client.get("/jobs/")
+    json_data = response.json()
     response_code = 200
     expected_jobs = 2
 
@@ -78,11 +74,15 @@ def test_get_jobs(client, init_database):
     assert json_data[1]['obs_job'] == 'Equipe colaborativa'
     assert json_data[1]['date'] == '2023-11-15T09:00:00'
 
+# Teste para obter todos os jobs quando o banco de dados está vazio
+def test_get_jobs_empty():
+    # Limpa o banco de dados antes do teste
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
 
-def test_get_jobs_empty(client):
-    # Testa o caso em que não há nenhum job no banco de dados
-    response = client.get('/jobs')
-    json_data = response.get_json()
+    # Faz uma requisição GET para o endpoint /jobs
+    response = client.get("/jobs/")
+    json_data = response.json()
     response_code = 200
 
     # Verifica se a resposta é 200 OK
