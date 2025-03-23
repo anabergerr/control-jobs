@@ -1,13 +1,13 @@
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String
-from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+from database.database import Base  # Importando a base correta
 
 
 class Job(Base):
     __tablename__ = "jobs"
+
     id_job = Column(Integer, primary_key=True, index=True)
     name_job = Column(String(100), nullable=False)
     sequence_job = Column(String(100), nullable=False)
@@ -24,5 +24,5 @@ class Job(Base):
             "name_company": self.name_company,
             "result_job": self.result_job,
             "obs_job": self.obs_job,
-            "date": self.date.isoformat(),
+            "date": self.date.isoformat() if self.date else None,
         }
