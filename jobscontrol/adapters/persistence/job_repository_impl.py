@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+
 from adapters.persistence.models import Job
 from core.domain.job import JobCreate, JobResponse
 from core.ports.job_repository import JobRepository
