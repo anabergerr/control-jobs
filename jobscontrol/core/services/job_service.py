@@ -1,4 +1,4 @@
-from core.domain.job import JobCreate, JobResponse  # Importe as classes corretas
+from core.domain.job import JobCreate, JobResponse
 from core.ports.job_repository import JobRepository
 
 

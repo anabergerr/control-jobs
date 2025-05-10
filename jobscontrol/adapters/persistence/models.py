@@ -1,8 +1,6 @@
-from datetime import datetime
-
 from sqlalchemy import Column, DateTime, Integer, String
-
-from database.database import Base  # Importando a base correta
+from datetime import datetime, UTC
+from database.database import Base
 
 
 class Job(Base):
@@ -14,7 +12,7 @@ class Job(Base):
     name_company = Column(String(100), nullable=False)
     result_job = Column(String(100), nullable=False)
     obs_job = Column(String(600), nullable=True)
-    date = Column(DateTime, default=datetime.utcnow)
+    date = Column(DateTime, default=lambda: datetime.now(UTC))
 
     def as_dict(self):
         return {
