@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 
-from adapters.web.job_routes import router as jobs_router
 from adapters.web.auth_routes import router as auth_router
+from adapters.web.job_routes import router as jobs_router
 from adapters.web.user_routes import router as user_router
 from database.database import Base, engine
-
 
 Base.metadata.create_all(bind=engine)
 

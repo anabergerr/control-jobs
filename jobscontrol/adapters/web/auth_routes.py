@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+
 from infrastructure.auth.auth_config import oauth
 
 router = APIRouter()

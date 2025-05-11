@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+
 from adapters.persistence.models.model_user import User
 
 

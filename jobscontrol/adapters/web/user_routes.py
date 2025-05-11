@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
 from adapters.persistence.user_repository_impl import UserRepository
+from core.services.jwt_service import create_jwt_token
 from database.database import SessionLocal
 from infrastructure.auth.auth_config import oauth
-from core.services.jwt_service import create_jwt_token
 
 router = APIRouter()
 
