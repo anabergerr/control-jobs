@@ -18,4 +18,4 @@ class Job(Base):
     obs_job = Column(String(600), nullable=True)
     date = Column(DateTime, default=lambda: datetime.now(UTC))
 
-    user = relationship("UserModel", back_populates="jobs")
+    user = relationship("User", back_populates="jobs")

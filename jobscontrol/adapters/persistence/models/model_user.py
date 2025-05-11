@@ -12,11 +12,11 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
-    google_id = Column(String(100), unique=True, index=True, nullable=False)
-    password_hash = Column(String(255), nullable=False)
+    google_id = Column(String, nullable=True)
+    password_hash = Column(String(255), nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     updated_at = Column(
         DateTime, default=lambda: datetime.now(UTC), onupdate=lambda: datetime.now(UTC)
     )
 
-    jobs = relationship("JobModel", back_populates="user", cascade="all, delete-orphan")
+    jobs = relationship("Job", back_populates="user", cascade="all, delete-orphan")

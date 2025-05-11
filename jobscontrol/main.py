@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from starlette.middleware.sessions import SessionMiddleware
 
 from adapters.web.auth_routes import router as auth_router
 from adapters.web.job_routes import router as jobs_router
@@ -9,6 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.add_middleware(SessionMiddleware, secret_key="UMA_CHAVE_SECRETA_BEM_FORTE")
 app.include_router(jobs_router)
 app.include_router(auth_router)
 app.include_router(user_router)

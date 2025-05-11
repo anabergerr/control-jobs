@@ -1,8 +1,11 @@
+import os
 from datetime import datetime, timedelta
 
+from dotenv import load_dotenv
 from jose import jwt
 
-SECRET_KEY = "SUA_CHAVE_SECRETA"
+load_dotenv()
+SECRET_KEY = os.environ["SECRET_KEY"]
 ALGORITHM = "HS256"
 
 

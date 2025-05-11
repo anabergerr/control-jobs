@@ -17,6 +17,10 @@ dependencies = [
     "authlib>=1.5.2",
     "python-jose>=3.4.0",
     "httpx>=0.28.1",
+    "dotenv>=0.9.9",
+    "itsdangerous>=2.2.0",
+    "bcrypt>=4.3.0",
+    "passlib>=1.7.4",
 ]
 
 [tool.ruff]
