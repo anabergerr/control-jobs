@@ -2,14 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from adapters.persistence.job_repository_impl import JobRepositoryImpl
-from core.domain.job import JobCreate, JobResponse  # Importe as classes corretas
+from core.domain.job import JobCreate, JobResponse
 from core.services.job_service import JobService
 from database.database import SessionLocal
 
 router = APIRouter()
 
 
-# Função para obter a sessão do banco de dados
 def get_db():
     db = SessionLocal()
     try:

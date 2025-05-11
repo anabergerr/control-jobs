@@ -1,4 +1,3 @@
-import pytest
 from core.domain.job import JobCreate, JobResponse
 
 

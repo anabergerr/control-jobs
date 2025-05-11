@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from adapters.persistence.models import Base, Job
+from adapters.persistence.models.model_job import Base, Job
 from adapters.persistence.job_repository_impl import JobRepositoryImpl
 from core.domain.job import JobCreate
 
