@@ -9,7 +9,7 @@ from database.database import Base
 class Job(Base):
     __tablename__ = "jobs"
 
-    id_job = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     name_job = Column(String(100), nullable=False)
     sequence_job = Column(String(100), nullable=False)

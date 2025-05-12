@@ -24,9 +24,7 @@ def get_db():
 @router.get("/auth")
 async def auth(request: Request, db: Session = Depends(get_db)):
     token = await oauth.google.authorize_access_token(request)
-    print("Token recebido:", token)
     user_info = await oauth.google.userinfo(token=token)
-    print("--------------User Info recebido:-------------", user_info)
 
     user_repo = UserRepository(db)
     user = user_repo.get_by_google_id(user_info["sub"])
@@ -71,7 +69,7 @@ async def register_user(request: Request, db: Session = Depends(get_db)):
         created_at=datetime.utcnow(),
     )
 
-    token = create_jwt_token({"sub": user.id, "email": user.email})
+    token = create_jwt_token({"sub": str(user.id), "email": user.email})
     return {"access_token": token, "user": {"id": user.id, "email": user.email}}
 
 
