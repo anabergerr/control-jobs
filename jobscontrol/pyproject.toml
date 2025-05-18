@@ -13,10 +13,18 @@ dependencies = [
     "ruff>=0.6.6",
     "sqlalchemy>=2.0.35",
     "uvicorn>=0.34.0",
+    "black>=25.1.0",
+    "authlib>=1.5.2",
+    "python-jose>=3.4.0",
+    "httpx>=0.28.1",
+    "dotenv>=0.9.9",
+    "itsdangerous>=2.2.0",
+    "bcrypt>=4.3.0",
+    "passlib>=1.7.4",
 ]
 
 [tool.ruff]
-line-length = 88
+line-length = 100
 extend-exclude = ['migrations', 'tests', 'docs', 'build', 'dist']
 exclude = [".venv"]
 

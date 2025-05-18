@@ -12,13 +12,13 @@ class JobCreate(BaseModel):
 
 
 class JobResponse(BaseModel):
-    id_job: int
+    id: int
     name_job: str
     sequence_job: str
     name_company: str
     result_job: str
     obs_job: str | None = None
     date: datetime | None = None
+    user_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

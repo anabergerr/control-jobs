@@ -1,51 +1,92 @@
 import pytest
-from fastapi.testclient import TestClient
-from app.main import app
-from app.database import SessionLocal, engine
-from app.models import Base, Job
-from datetime import datetime
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-# Cria o cliente de teste
-client = TestClient(app)
+from adapters.persistence.models.model_job import Base, Job
+from adapters.persistence.job_repository_impl import JobRepositoryImpl
+from core.domain.job import JobCreate
 
-# Fixture para configurar o banco de dados de teste
-@pytest.fixture(scope="function")  #"function" para garantir que as tabelas sejam criadas antes de cada teste
-def setup_db():
-    # Cria as tabelas no banco de dados
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    yield db  # Retorna o banco de dados configurado
 
-    # Limpa o banco de dados após os testes
-    db.close()
-    Base.metadata.drop_all(bind=engine)
+@pytest.fixture
+def session():
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    sess = Session()
+    yield sess
+    sess.close()
 
-def test_create_job(setup_db):
-    # Define o payload (dados) para a requisição POST
-    payload = {
-        "name_job": "Desenvolvedor Backend",
-        "sequence_job": "12345",
-        "name_company": "Tech Solutions",
-        "result_job": "Projeto concluído com sucesso",
-        "obs_job": "Trabalho remoto, entregas semanais",
-        "date": "2023-10-05T14:30:00",  # Converte a string para datetime
-    }
 
-    # Faz uma requisição POST para a rota /jobs/
-    response = client.post("/jobs/", json=payload)
+def make_job_data(name="Job1"):
+    return JobCreate(
+        name_job=name,
+        sequence_job="123",
+        name_company="Empresa X",
+        result_job="Sucesso",
+        obs_job="Observação opcional",
+        date=None,
+    )
 
-    # Verifica se a resposta tem o status code 200 (OK)
-    assert response.status_code == 200
 
-    # Verifica se a mensagem de sucesso está presente na resposta
-    data = response.json()
-    assert data["message"] == "Job created successfully!"
+def test_create_job(session):
+    repo = JobRepositoryImpl(session)
+    job_data = JobCreate(
+        name_job="Test Job",
+        sequence_job="123",
+        name_company="Empresa X",
+        result_job="Sucesso",
+        obs_job="Observação opcional",
+    )
+    job_response = repo.create_job(job_data)
+    assert job_response.name_job == "Test Job"
+    assert job_response.name_company == "Empresa X"
+    assert session.query(Job).count() == 1
 
-    # Verifica se o Job foi realmente criado no banco de dados
-    db = setup_db
-    job = db.query(Job).filter(Job.name_job == "Desenvolvedor Backend").first()
-    assert job is not None
-    assert job.sequence_job == "12345"
-    assert job.name_company == "Tech Solutions"
-    assert job.result_job == "Projeto concluído com sucesso"
-    assert job.obs_job == "Trabalho remoto, entregas semanais"
+
+def test_get_jobs(session):
+    repo = JobRepositoryImpl(session)
+    job_data = JobCreate(
+        name_job="Job1",
+        sequence_job="123",
+        name_company="Empresa ssssX",
+        result_job="Sucesso",
+        obs_job="Observação opcional",
+    )
+    job_data2 = JobCreate(
+        name_job="Job2",
+        sequence_job="123",
+        name_company="Empresa ssssX",
+        result_job="Sucesso",
+        obs_job="Observação opcional",
+    )
+    repo.create_job(job_data)
+    repo.create_job(job_data2)
+    result = repo.get_jobs()
+    assert isinstance(result, list)
+    assert len(repo.get_jobs()) == 2
+    assert result[0].name_job == "Job1"
+    assert result[1].name_job == "Job2"
+
+
+def test_get_job_by_id(session):
+    repo = JobRepositoryImpl(session)
+    job = repo.create_job(make_job_data("Job1"))
+    found = repo.get_job_by_id(job.id_job)
+    assert found is not None
+    assert found.name_job == "Job1"
+    assert repo.get_job_by_id(999) is None  # Não existe
+
+
+def test_update_job(session):
+    repo = JobRepositoryImpl(session)
+    job = repo.create_job(make_job_data("Job1"))
+    updated = repo.update_job(job.id_job, make_job_data("Updated"))
+    assert updated.name_job == "Updated"
+    assert session.query(Job).filter_by(id_job=job.id_job).first().name_job == "Updated"
+
+
+def test_delete_job(session):
+    repo = JobRepositoryImpl(session)
+    job = repo.create_job(make_job_data("Job1"))
+    repo.delete_job(job.id_job)
+    assert session.query(Job).count() == 0
