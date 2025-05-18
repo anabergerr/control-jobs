@@ -20,7 +20,6 @@ def get_db():
         db.close()
 
 
-# ✅ Login com Google (callback)
 @router.get("/auth")
 async def auth(request: Request, db: Session = Depends(get_db)):
     token = await oauth.google.authorize_access_token(request)
@@ -41,7 +40,6 @@ async def auth(request: Request, db: Session = Depends(get_db)):
     }
 
 
-# ✅ Registro de novo usuário tradicional
 @router.post("/register")
 async def register_user(request: Request, db: Session = Depends(get_db)):
     data = await request.json()
