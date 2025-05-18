@@ -1,16 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from dotenv import load_dotenv
 import os
 
+from dotenv import load_dotenv
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from jose import JWTError, jwt
+from sqlalchemy.orm import Session
 
 from adapters.persistence.job_repository_impl import JobRepositoryImpl
 from core.domain.job import JobCreate, JobResponse
 from core.services.job_service import JobService
 from database.database import SessionLocal
-
-from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 load_dotenv()

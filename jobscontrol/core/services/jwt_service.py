@@ -2,9 +2,8 @@ import os
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
-from jose import jwt, JWTError
 from fastapi import HTTPException, status
-
+from jose import JWTError, jwt
 
 load_dotenv()
 SECRET_KEY = os.environ["SECRET_KEY"]
