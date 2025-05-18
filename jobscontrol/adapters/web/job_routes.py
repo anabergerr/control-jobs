@@ -47,9 +47,9 @@ def get_db():
 def create_job(
     job: JobCreate,
     db: Session = Depends(get_db),
-    user_id: int = Depends(get_current_user_id),  # <-- Aqui!
+    user_id: int = Depends(get_current_user_id),
 ):
-    print(user_id)
+    print("akiii", user_id)
     job_service = JobService(JobRepositoryImpl(db))
     return job_service.create_job(user_id, job)
 
@@ -58,11 +58,9 @@ def create_job(
 def get_jobs(
     db: Session = Depends(get_db), user_id: int = Depends(get_current_user_id)
 ):
-    # Inicializa o serviço passando o repositório
     job_service = JobService(JobRepositoryImpl(db))
 
-    # Passa o user_id para o serviço para filtrar os jobs
-    return job_service.get_jobs_by_user(user_id)
+    return job_service.get_jobs(user_id)
 
 
 @router.get("/jobs/{job_id}", response_model=JobResponse)
