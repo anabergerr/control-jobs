@@ -10,7 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.add_middleware(SessionMiddleware, secret_key="UMA_CHAVE_SECRETA_BEM_FORTE")
+app.add_middleware(SessionMiddleware, secret_key="")
 app.include_router(jobs_router)
 app.include_router(auth_router)
 app.include_router(user_router)
